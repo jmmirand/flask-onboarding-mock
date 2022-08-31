@@ -1,0 +1,25 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+click = "*"
+loguru = "*"
+mdutils = "*"
+pyyaml = "*"
+pony = "*"
+marshmallow = "*"
+webargs  = "*"
+flask = "*"
+flask_restx = "*"
+werkzeug = "==2.1.2"
+flask_jwt_extended = "*"
+
+[dev-packages]
+pylint = "*"
+pytest = "*"
+flake8 = "*"
+black = "*"
+pydocstyle = "*"
+autoflake = "*"

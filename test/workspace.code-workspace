@@ -1,0 +1,23 @@
+{
+	"folders": [
+		{
+			"path": "../../gha_clean_action_logs"
+		},
+		{
+			"path": "../../clean-workflows-logs-runs"
+		},
+		{
+			"path": "../../../jmmirand-worker/shared-workflows"
+		},
+		{
+			"path": "../../../jmmirand-kube-example/gha_runners_controler_arm"
+		},
+		{
+			"path": "../../info_general_micasa"
+		},
+		{
+			"path": ".."
+		}
+	],
+	"settings": {}
+}
