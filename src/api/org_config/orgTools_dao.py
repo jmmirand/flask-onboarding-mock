@@ -1,15 +1,15 @@
 """Modulo gestión conf herramientas de las organizaciones."""
-from flask import jsonify
-from pyparsing import DebugExceptionAction
-from pony.orm import commit
-from loguru import logger
 from datetime import datetime
+
+from flask import jsonify
+from loguru import logger
+from pony.orm import commit
+
 from utils.db_model import OrgTool
 
 
 class orgToolsDao:
     """Clase que gestiona configuracion herramientas."""
-
 
     @staticmethod
     def getAllTools():
@@ -21,62 +21,60 @@ class orgToolsDao:
             results.append(org_json)
         return results
 
-
     @staticmethod
-    def getOrgTools(org):
+    def getOrgTools(org_id):
         """Devuelve todas las instancias de herramientas de una organizacion."""
         results = []
-        orgs = OrgTool.select(org=org)
-        for org in orgs:
-            org_json = org.to_dict()
-            results.append(org_json)
+        orgTools = OrgTool.get(org_id=org_id)
+        for tool in orgTools:
+            orgtool_json = tool.to_dict()
+            results.append(orgtool_json)
         return results
 
     @staticmethod
-    def getOrgToolInstances(org,tool):
+    def getOrgToolInstances(org_id, tool):
         """Devuelve todas las instancias de herramientas de una organizacion."""
         results = []
-        orgs = OrgTool.select(org=org, tool=tool)
-        for org in orgs:
-            org_json = org.to_dict()
-            results.append(org_json)
+        orgTools = OrgTool.select(org_id=org_id, tool=tool)
+        for tool in orgTools:
+            orgtool_json = tool.to_dict()
+            results.append(orgtool_json)
         return results
 
-
     @staticmethod
-    def getInstanceTool(org, tool, instance):
+    def getInstanceTool(orgId, tool, instance):
         """Devuelve la informacion de una instancia de una herramienta."""
-        jiraInstance = OrgTool.get(org=org, tool=tool, instance_name=instance)
+        jiraInstance = OrgTool.get(org_id=orgId, tool=tool, instance_name=instance)
         jiraInstanceJSON = jiraInstance.to_dict()
         return jiraInstanceJSON
 
     @staticmethod
-    def deleteInstanceTool(org, tool, instance):
+    def deleteInstanceTool(org_id, tool, instance):
         """Devuelve la informacion de una instancia de una herramienta."""
-        orgs = OrgTool.select( org=org, tool=tool, instance_name=instance)
-        for org in orgs:
-            org.delete()
+        orgs = OrgTool.select(org_id=org_id, tool=tool, instance_name=instance)
+        for tool in orgs:
+            tool.delete()
         return True
 
-
-
     @staticmethod
-    def addInstanceTool( org, tool, name, owner, licences=""):
+    def addInstanceTool(org_id, orgName, orgAcronym, tool, name, owner, licences=""):
+
         """Crea un nueva Entrada de Configuracion de Instancia."""
-        
-        orgtools = OrgTool.select(org=org, tool=tool, instance_name=name)
-        for orgtool in orgtools:
-            logger.warning(f"Config para org:{org} tool:{tool} instancia:{name}, not added")
+
+        orgtools = OrgTool.select(org_id=org_id, tool=tool, instance_name=name)
+        for tool in orgtools:
+            logger.warning(f"Config para org:{orgAcronym} tool:{tool} instancia:{name}, not added, Already exist.")
             return False
-        
+
         orgTool = OrgTool()
-        orgTool.org = org
+        orgTool.org_id = org_id
+        orgTool.org_name = orgName
+        orgTool.org_acronym = orgAcronym
         orgTool.tool = tool
         orgTool.instance_name = name
         orgTool.owner = owner
         orgTool.licences = licences
-        
+        orgTool.org_id = org_id
+
         commit()
-        return True 
- 
- 
+        return True
